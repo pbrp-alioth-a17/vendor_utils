@@ -1,3 +1,11 @@
+# Device-specific validated packaging can replace the legacy generic installer.
+ifneq ($(strip $(PBRP_PACKAGE_SCRIPT)),)
+# Ninja actions do not inherit arbitrary caller environment variables.
+pbrp-shell-quote = '$(subst ','"'"',$(1))'
+.PHONY: pbrp
+pbrp: $(INSTALLED_BOOTIMAGE_TARGET) signapk
+	$(hide) bash $(PBRP_PACKAGE_SCRIPT) $(call pbrp-shell-quote,$(PBRP_ROM)) $(call pbrp-shell-quote,$(PBRP_METADATA_BOOT)) $(call pbrp-shell-quote,$(PBRP_SECURITY_PATCH))
+else
 WORK_PATH := $(OUT_DIR)/target/product/$(TARGET_DEVICE)/zip
 TARGET_DIR := $(WORK_PATH)/..
 BUILD_TOP := $(TOP)
@@ -105,3 +113,5 @@ pbrp: $(pbrpimage)
 	@printf "Flashable Zip: %s\n" "$(TARGET_DIR)/$(ZIP_NAME)"
 	@printf "Size: %s\n" "$$(du -h $(TARGET_DIR)/$(ZIP_NAME) | awk '{print $$1}')"
 	@echo "----------------------------------------------"
+
+endif # PBRP_PACKAGE_SCRIPT

@@ -1,3 +1,3 @@
-#!/usr/bin/bash
-
-curl https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/pb_devices.json > /tmp/pb_devices.json
+#!/bin/bash
+# Device metadata is read from this checkout by pb_devices.py.
+# Environment setup must not fetch network data or overwrite shared /tmp files.

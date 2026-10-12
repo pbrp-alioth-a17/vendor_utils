@@ -5,18 +5,18 @@
 # Copyright (C) 2018, PitchBlack Recovery Project <pitchblackrecovery@gmail.com>
 #
 
-import sys, json, urllib.request, shutil, os
+import sys, json
+from pathlib import Path
 
-url = 'https://raw.githubusercontent.com/PitchBlackRecoveryProject/vendor_utils/pb/pb_devices.json'
 arguments = sys.argv
-json_file = "/tmp/pb_devices.json"
+json_file = Path(__file__).resolve().with_name("pb_devices.json")
 
 def invalid_arguments():
 	raise Exception("PB_DEVICES.PY: Use proper arguments.\n\n Available Commands:\n > pb_devices.py verify <vendor> <codename>.")
 
 def print_all_official():
-	response = urllib.request.urlopen(url)
-	data = json.loads(response.read().decode('utf-8'))
+	with json_file.open() as f:
+		data = json.load(f)
 	ven = data.keys()
 	cod = ""
 	for i in ven:
